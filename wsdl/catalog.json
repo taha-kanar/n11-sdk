@@ -1,0 +1,87 @@
+[
+  {
+    "module": "category",
+    "service": "categoryService",
+    "endpoint": "https://api.n11.com/ws/categoryService/",
+    "operations": [
+      "GetCategoryAttributesId",
+      "GetCategoryAttributes",
+      "GetCategoryAttributeValue",
+      "GetParentCategory",
+      "GetTopLevelCategories",
+      "GetSubCategories"
+    ]
+  },
+  {
+    "module": "city",
+    "service": "cityService",
+    "endpoint": "https://api.n11.com/ws/cityService/",
+    "operations": [
+      "GetCities",
+      "GetCity",
+      "GetNeighborhoods",
+      "GetDistrict"
+    ]
+  },
+  {
+    "module": "order",
+    "service": "orderService",
+    "endpoint": "https://api.n11.com/ws/orderService/",
+    "operations": [
+      "CombineItems",
+      "OrderDetail",
+      "SeparateCombinedItems",
+      "OrderList",
+      "OrderItemDelivery",
+      "OrderItemReject",
+      "DetailedOrderList",
+      "OrderItemAccept",
+      "ComplementaryItemDetail",
+      "MakeOrderItemShipment",
+      "OrderItemIdentity"
+    ]
+  },
+  {
+    "module": "product",
+    "service": "productService",
+    "endpoint": "https://api.n11.com/ws/productService/",
+    "operations": [
+      "GetProductList",
+      "UpdateProductPriceBySellerCode",
+      "GetProductBySellerCode",
+      "DeleteProductById",
+      "UpdateDiscountValueBySellerCode",
+      "GetProductQuestionList",
+      "UpdateProductBasic",
+      "GetProductQuestionDetail",
+      "SaveProductAnswer",
+      "UpdateDiscountValueByProductId",
+      "SaveProduct",
+      "DeleteProductBySellerCode",
+      "GetProductByProductId",
+      "SearchProducts",
+      "AdaptUnificationProducts",
+      "UpdateProductPriceById",
+      "ProductApprovalStatus",
+      "ProductPriceAddOptionPrice"
+    ]
+  },
+  {
+    "module": "shipment-company",
+    "service": "shipmentCompanyService",
+    "endpoint": "https://api.n11.com/ws/shipmentCompanyService/",
+    "operations": [
+      "GetShipmentCompanies"
+    ]
+  },
+  {
+    "module": "shipment",
+    "service": "shipmentService",
+    "endpoint": "https://api.n11.com/ws/shipmentService/",
+    "operations": [
+      "GetShipmentTemplateList",
+      "GetShipmentTemplate",
+      "CreateOrUpdateShipmentTemplate"
+    ]
+  }
+]

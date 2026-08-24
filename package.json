@@ -1,0 +1,36 @@
+{
+  "name": "n11-sdk",
+  "version": "0.1.0",
+  "description": "Typed TypeScript SDK for the n11 Marketplace SOAP API — categories, cities, orders, products and shipping, generated from n11's own WSDLs.",
+  "keywords": ["n11", "marketplace", "e-commerce", "sdk", "soap", "typescript"],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": { "node": ">=18" },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "wsdl", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup",
+    "prepare": "npm run build",
+    "generate": "node tools/generate.mjs",
+    "fetch-wsdl": "node tools/fetch-wsdl.mjs",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "note": "Copies of n11's published WSDLs. Refresh with `npm run fetch-wsdl`, then `npm run generate`.",
+  "namespace": "http://www.n11.com/ws/schemas",
+  "soapVersion": "1.1",
+  "services": [
+    {
+      "file": "CategoryService.wsdl",
+      "service": "CategoryService",
+      "module": "category",
+      "endpoint": "https://api.n11.com/ws/categoryService/",
+      "wsdlUrl": "https://api.n11.com/ws/CategoryService.wsdl",
+      "operations": [
+        "GetCategoryAttributesId",
+        "GetCategoryAttributes",
+        "GetCategoryAttributeValue",
+        "GetParentCategory",
+        "GetTopLevelCategories",
+        "GetSubCategories"
+      ]
+    },
+    {
+      "file": "CityService.wsdl",
+      "service": "CityService",
+      "module": "city",
+      "endpoint": "https://api.n11.com/ws/cityService/",
+      "wsdlUrl": "https://api.n11.com/ws/CityService.wsdl",
+      "operations": [
+        "GetCities",
+        "GetCity",
+        "GetNeighborhoods",
+        "GetDistrict"
+      ]
+    },
+    {
+      "file": "OrderService.wsdl",
+      "service": "OrderService",
+      "module": "order",
+      "endpoint": "https://api.n11.com/ws/orderService/",
+      "wsdlUrl": "https://api.n11.com/ws/OrderService.wsdl",
+      "operations": [
+        "CombineItems",
+        "OrderDetail",
+        "SeparateCombinedItems",
+        "OrderList",
+        "OrderItemDelivery",
+        "OrderItemReject",
+        "DetailedOrderList",
+        "OrderItemAccept",
+        "ComplementaryItemDetail",
+        "MakeOrderItemShipment",
+        "OrderItemIdentity"
+      ]
+    },
+    {
+      "file": "ProductService.wsdl",
+      "service": "ProductService",
+      "module": "product",
+      "endpoint": "https://api.n11.com/ws/productService/",
+      "wsdlUrl": "https://api.n11.com/ws/ProductService.wsdl",
+      "operations": [
+        "GetProductList",
+        "UpdateProductPriceBySellerCode",
+        "GetProductBySellerCode",
+        "DeleteProductById",
+        "UpdateDiscountValueBySellerCode",
+        "GetProductQuestionList",
+        "UpdateProductBasic",
+        "GetProductQuestionDetail",
+        "SaveProductAnswer",
+        "UpdateDiscountValueByProductId",
+        "SaveProduct",
+        "DeleteProductBySellerCode",
+        "GetProductByProductId",
+        "SearchProducts",
+        "AdaptUnificationProducts",
+        "UpdateProductPriceById",
+        "ProductApprovalStatus",
+        "ProductPriceAddOptionPrice"
+      ]
+    },
+    {
+      "file": "ShipmentCompanyService.wsdl",
+      "service": "ShipmentCompanyService",
+      "module": "shipment-company",
+      "endpoint": "https://api.n11.com/ws/shipmentCompanyService/",
+      "wsdlUrl": "https://api.n11.com/ws/ShipmentCompanyService.wsdl",
+      "operations": [
+        "GetShipmentCompanies"
+      ]
+    },
+    {
+      "file": "ShipmentService.wsdl",
+      "service": "ShipmentService",
+      "module": "shipment",
+      "endpoint": "https://api.n11.com/ws/shipmentService/",
+      "wsdlUrl": "https://api.n11.com/ws/ShipmentService.wsdl",
+      "operations": [
+        "GetShipmentTemplateList",
+        "GetShipmentTemplate",
+        "CreateOrUpdateShipmentTemplate"
+      ]
+    }
+  ]
+}

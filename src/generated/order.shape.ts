@@ -1,0 +1,83 @@
+/* eslint-disable */
+/**
+ * OrderService — the schema as runtime data.
+ *
+ * The codec walks these descriptors so a one-element list is still an array and a seller
+ * code like `"0123"` survives as a string. Nothing here is guessed from the payload.
+ *
+ * GENERATED FILE — do not edit by hand. Run `npm run generate`.
+ */
+import type { ServiceShapes } from '../soap/shape.js';
+
+export const orderServiceShapes: ServiceShapes = {
+  service: "OrderService",
+  endpoint: "https://api.n11.com/ws/orderService/",
+  enums: new Set([]),
+  types: {
+  OrderDetailData: [{ n:"id", t:"number" }, { n:"orderNumber", t:"string" }, { n:"rwbOrder", t:"boolean", x:1 }, { n:"buyer", t:"BuyerWithTaxFields", c:1 }, { n:"citizenshipId", t:"string" }, { n:"invoiceType", t:"string" }, { n:"itemList", t:"OrderItemDataList", c:1 }, { n:"serviceItemList", t:"ServiceOrderItemDataList", c:1 }, { n:"status", t:"number" }, { n:"paymentType", t:"number" }, { n:"billingTemplate", t:"BillingTemplate", c:1 }, { n:"shippingAddress", t:"AddressModel", c:1 }, { n:"billingAddress", t:"AddressModel", c:1 }, { n:"createDate", t:"string" }, { n:"orderItemShipmentList", t:"OrderItemShipmentDataList", c:1 }],
+  OrderItemShipmentDataList: [{ n:"orderItemShipmentInfo", t:"OrderItemShipmentInfoList", c:1, l:1 }],
+  OrderItemShipmentInfoList: [{ n:"shippingAddress", t:"AddressModel", c:1 }, { n:"deliveryPointMessage", t:"string" }, { n:"orderItemIds", t:"OrderItemIdList", c:1 }],
+  OrderItemIdList: [{ n:"id", t:"number" }],
+  ServiceOrderItemDataList: [{ n:"serviceItem", t:"ServiceOrderItemData", c:1, l:1 }],
+  ServiceOrderItemData: [{ n:"orderItemType", t:"number" }, { n:"installmentChargeWithVAT", t:"number" }, { n:"price", t:"number" }, { n:"totalDiscountPrice", t:"number" }, { n:"quantity", t:"number" }, { n:"sellerInvoiceAmount", t:"number" }, { n:"orderItemList", t:"ProductOrderItemList", c:1 }],
+  ProductOrderItemList: [{ n:"orderItem", t:"number", l:1 }],
+  BillingTemplate: [{ n:"originalPrice", t:"number" }, { n:"totalSellerDiscount", t:"number" }, { n:"totalServiceItemOriginalPrice", t:"number" }, { n:"installmentChargeWithVat", t:"number" }, { n:"sellerInvoiceAmount", t:"number" }, { n:"totalMallDiscountPrice", t:"number" }, { n:"dueAmount", t:"number" }],
+  OrderItemDataList: [{ n:"item", t:"OrderSearchData", c:1, l:1 }],
+  OrderData: [{ n:"id", t:"number" }, { n:"createDate", t:"string" }, { n:"totalDiscountAmount", t:"number" }, { n:"paymentType", t:"number", x:1 }, { n:"orderNumber", t:"string" }, { n:"totalAmount", t:"number" }, { n:"status", t:"number", x:1 }, { n:"citizenshipId", t:"string" }],
+  OrderItemDataRequest: [{ n:"id", t:"number" }],
+  OrderItemDataListRequest: [{ n:"orderItem", t:"OrderItemDataRequest", c:1, l:1 }],
+  OrderDataRequest: [{ n:"id", t:"number" }],
+  OrderItemDataRequestForRejection: [{ n:"orderItem", t:"OrderItemDataRequest", c:1, l:1 }],
+  OrderDataList: [{ n:"order", t:"OrderData", c:1, l:1 }],
+  OrderDataListRequest: [{ n:"productId", t:"number", x:1 }, { n:"status", t:"string", x:1 }, { n:"buyerName", t:"string" }, { n:"orderNumber", t:"string" }, { n:"productSellerCode", t:"string", x:1 }, { n:"recipient", t:"string" }, { n:"sameDayDelivery", t:"boolean", x:1 }, { n:"period", t:"OrderSearchPeriod", c:1 }, { n:"sortForUpdateDate", t:"boolean" }, { n:"updateDateSortOrder", t:"string", x:1 }],
+  OrderSearchPeriod: [{ n:"startDate", t:"string", x:1 }, { n:"endDate", t:"string", x:1 }],
+  OrderItemData: [{ n:"id", t:"number" }, { n:"stockKeepingUnitId", t:"number" }, { n:"productSellerCode", t:"string" }, { n:"price", t:"number" }, { n:"sellerDiscount", t:"number" }, { n:"mallDiscount", t:"number" }, { n:"commission", t:"number" }, { n:"status", t:"number" }, { n:"quantity", t:"number" }, { n:"productName", t:"string" }, { n:"deliveryFeeType", t:"number" }, { n:"dueAmount", t:"number" }, { n:"shipmentInfo", t:"OrderItemShipmentInfo", c:1 }, { n:"attributes", t:"SkuAttributeList", c:1 }, { n:"customTextOptionValues", t:"CustomTextOptionsDataList", c:1 }, { n:"bundle", t:"boolean" }, { n:"updatedDate", t:"string" }, { n:"cargoCompanyWarning", t:"string" }],
+  SkuAttributeList: [{ n:"attribute", t:"SkuAttribute", c:1, l:1 }],
+  CustomTextOptionsDataList: [{ n:"customTextOptionValue", t:"CustomTextOptionsData", c:1, l:1 }],
+  SkuAttribute: [{ n:"id", t:"number" }, { n:"name", t:"string" }, { n:"value", t:"string" }],
+  CustomTextOptionsData: [{ n:"option", t:"string" }, { n:"text", t:"string" }],
+  OrderItemListShipmentRequest: [{ n:"orderItem", t:"OrderItemShipmentRequest", c:1, l:1 }],
+  OrderItemShipmentRequest: [{ n:"id", t:"number" }, { n:"shipmentInfo", t:"MakeShipmentInfoRequest", c:1 }],
+  ShipmentCompanyRequest: [{ n:"id", t:"number" }],
+  ShipmentInfoRequest: [{ n:"shipmentCompany", t:"ShipmentCompanyRequest", c:1 }, { n:"campaignNumber", t:"string" }, { n:"shipmentCode", t:"number" }, { n:"shipmentMethod", t:"number" }],
+  MakeShipmentInfoRequest: [{ n:"shipmentCompany", t:"ShipmentCompanyRequest", c:1 }, { n:"campaignNumber", t:"string" }, { n:"trackingNumber", t:"string" }, { n:"shipmentMethod", t:"number" }],
+  OrderItemShipment: [{ n:"id", t:"number" }, { n:"price", t:"number" }, { n:"sellerDiscount", t:"number" }, { n:"mallDiscount", t:"number" }, { n:"commission", t:"number" }, { n:"status", t:"number" }, { n:"quantity", t:"number" }, { n:"productName", t:"string" }, { n:"shipmentInfo", t:"OrderItemShipmentInfo", c:1 }],
+  OrderSearchData: [{ n:"id", t:"number" }, { n:"productId", t:"number" }, { n:"deliveryFeeType", t:"number" }, { n:"productSellerCode", t:"string" }, { n:"status", t:"string" }, { n:"rejectReason", t:"string" }, { n:"approvedDate", t:"string" }, { n:"dueAmount", t:"number" }, { n:"installmentChargeWithVAT", t:"number" }, { n:"price", t:"number" }, { n:"totalMallDiscountPrice", t:"number" }, { n:"quantity", t:"number" }, { n:"sellerCouponDiscount", t:"number" }, { n:"sellerStockCode", t:"string" }, { n:"version", t:"number" }, { n:"attributes", t:"SkuAttributeList", c:1 }, { n:"sellerDiscount", t:"number" }, { n:"mallDiscount", t:"number" }, { n:"commission", t:"number" }, { n:"sellerInvoiceAmount", t:"number" }, { n:"productName", t:"string" }, { n:"shipmentInfo", t:"OrderItemShipmentInfo", c:1 }, { n:"shippingDate", t:"string" }, { n:"customTextOptionValues", t:"CustomTextOptionsDataList", c:1 }, { n:"shipmenCompanyCampaignNumber", t:"string" }],
+  DetailedOrderDataList: [{ n:"order", t:"DetailedOrderData", c:1, l:1 }],
+  DetailedOrderData: [{ n:"id", t:"number" }, { n:"invoiceType", t:"string" }, { n:"status", t:"number" }, { n:"orderNumber", t:"string" }, { n:"totalAmount", t:"number" }, { n:"paymentType", t:"number" }, { n:"citizenshipId", t:"string" }, { n:"orderItemList", t:"DetailedOrderItemDataList", c:1 }, { n:"createDate", t:"string" }, { n:"serviceItemList", t:"ServiceOrderItemDataList", c:1 }],
+  DetailedOrderItemDataList: [{ n:"orderItem", t:"OrderItemData", c:1, l:1 }],
+  ItemWithComplementaryList: [{ n:"itemWithComplementary", t:"ItemWithComplementaryData", c:1 }],
+  OrderItemShipmentInfo: [{ n:"shipmentCompany", t:"ShipmentCompanyData", c:1, x:1 }, { n:"trackingNumber", t:"string" }, { n:"trackingNumberStatus", t:"string" }, { n:"shipmentCode", t:"number" }, { n:"campaignNumber", t:"string" }, { n:"shipmentMethod", t:"string" }, { n:"campaignNumberStatus", t:"number" }],
+  MakeOrderItemShipmentInfo: [{ n:"shipmentCompany", t:"ShipmentCompanyData", c:1, x:1 }, { n:"trackingNumber", t:"string" }, { n:"trackingNumberStatus", t:"string" }, { n:"campaignNumber", t:"string" }, { n:"shipmentMethod", t:"string" }],
+  BuyerAddressData: [{ n:"fullName", t:"string" }, { n:"address", t:"string" }, { n:"phoneNumber", t:"number" }, { n:"tcNo", t:"string" }, { n:"companyName", t:"string" }, { n:"taxNo", t:"string" }, { n:"taxOffice", t:"string" }],
+  ItemWithComplementaryData: [{ n:"sellerCode", t:"string" }, { n:"productTitle", t:"string" }, { n:"category", t:"string" }, { n:"price", t:"number" }, { n:"paidDate", t:"string" }, { n:"acceptedDate", t:"string" }, { n:"status", t:"number" }, { n:"certificateNo", t:"string", l:1 }, { n:"compItemId", t:"number" }, { n:"compAcceptedDate", t:"string" }, { n:"buyerAddress", t:"BuyerAddressData", c:1 }],
+  OrderItemIdentityDataList: [{ n:"orderItem", t:"OrderItemIdentityDataRequest", c:1, l:1 }],
+  OrderItemIdentityDataRequest: [{ n:"orderItemId", t:"number" }, { n:"productId", t:"number" }, { n:"serialDataList", t:"SerialDataListRequest", c:1 }],
+  SerialDataListRequest: [{ n:"serialData", t:"SerialDataRequest", c:1, l:1 }],
+  SerialDataRequest: [{ n:"serialNumber", t:"string" }, { n:"imei1", t:"string" }, { n:"imei2", t:"string" }],
+  OrderItemListRequest: [{ n:"orderItemId", t:"number" }],
+  Buyer: [{ n:"id", t:"number" }, { n:"fullName", t:"string" }],
+  BuyerWithTaxFields: [{ n:"id", t:"number" }, { n:"fullName", t:"string" }, { n:"taxId", t:"string", x:1 }, { n:"taxOffice", t:"string", x:1 }, { n:"email", t:"string", x:1 }, { n:"tcId", t:"string" }],
+  AddressModel: [{ n:"address", t:"string" }, { n:"fullName", t:"string" }, { n:"city", t:"string" }, { n:"district", t:"string" }, { n:"neighborhood", t:"string" }, { n:"postalCode", t:"string" }, { n:"gsm", t:"string" }, { n:"tcId", t:"string" }, { n:"taxId", t:"string" }, { n:"taxHouse", t:"string" }],
+  ShipmentCompanyData: [{ n:"id", t:"number" }, { n:"name", t:"string" }, { n:"shortName", t:"string" }],
+  PagingData: [{ n:"currentPage", t:"number", x:1 }, { n:"pageSize", t:"number", x:1 }, { n:"totalCount", t:"number", x:1 }, { n:"pageCount", t:"number", x:1 }],
+  RequestPagingData: [{ n:"currentPage", t:"number", x:1 }, { n:"pageSize", t:"number", x:1 }],
+  BaseResponse: [{ n:"status", t:"string", x:1 }, { n:"errorCode", t:"string", x:1 }, { n:"errorMessage", t:"string", x:1 }, { n:"errorCategory", t:"string", x:1 }],
+  ResultInfo: [{ n:"status", t:"string", x:1 }, { n:"errorCode", t:"string", x:1 }, { n:"errorMessage", t:"string", x:1 }, { n:"errorCategory", t:"string", x:1 }],
+  BaseRequest: [{ n:"authentication", t:"Authentication", c:1 }],
+  Authentication: [{ n:"appKey", t:"string" }, { n:"appSecret", t:"string" }],
+  },
+  operations: {
+  CombineItems: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemDataListRequest", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }] },
+  OrderDetail: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderRequest", t:"OrderDataRequest", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"orderDetail", t:"OrderDetailData", c:1 }] },
+  SeparateCombinedItems: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemDataListRequest", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }] },
+  OrderList: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"searchData", t:"OrderDataListRequest", c:1 }, { n:"pagingData", t:"RequestPagingData", c:1, x:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"pagingData", t:"PagingData", c:1 }, { n:"orderList", t:"OrderDataList", c:1 }] },
+  OrderItemDelivery: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemListRequest", c:1 }, { n:"shipmentCompanyId", t:"number" }, { n:"shipmentMethod", t:"string" }, { n:"deliveryTime", t:"string" }], response: [{ n:"result", t:"ResultInfo", c:1 }] },
+  OrderItemReject: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemDataRequestForRejection", c:1 }, { n:"rejectReason", t:"string" }, { n:"rejectReasonType", t:"string", x:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"orderItemList", t:"DetailedOrderItemDataList", c:1 }] },
+  DetailedOrderList: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"searchData", t:"OrderDataListRequest", c:1, x:1 }, { n:"pagingData", t:"PagingData", c:1, x:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"orderList", t:"DetailedOrderDataList", c:1 }, { n:"pagingData", t:"PagingData", c:1 }] },
+  OrderItemAccept: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemDataListRequest", c:1 }, { n:"numberOfPackages", t:"number" }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"orderItemList", t:"DetailedOrderItemDataList", c:1 }] },
+  ComplementaryItemDetail: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemDataListRequest", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"itemWithCompInfoList", t:"ItemWithComplementaryList", c:1 }] },
+  MakeOrderItemShipment: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderItemList", t:"OrderItemListShipmentRequest", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }, { n:"orderItemList", t:"DetailedOrderItemDataList", c:1 }] },
+  OrderItemIdentity: { request: [{ n:"auth", t:"Authentication", c:1 }, { n:"orderNumber", t:"string" }, { n:"orderItemList", t:"OrderItemIdentityDataList", c:1 }], response: [{ n:"result", t:"ResultInfo", c:1 }] },
+  },
+};
