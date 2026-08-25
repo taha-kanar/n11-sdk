@@ -20,12 +20,14 @@ export interface CategoryData {
   subCategoryList?: SubCategoryList;
   attributeList?: CategoryAttributeList;
   metadata?: PagingData;
+  lastModifiedDate?: string; // observed in production; not in the WSDL
 }
 
 export interface SubCategoryData {
   id?: number;
   name?: string;
   subCategoryList?: SubCategoryList;
+  lastModifiedDate?: string; // observed in production; not in the WSDL
 }
 
 export interface SubCategory {
@@ -38,11 +40,13 @@ export interface ParentCategoryData {
   id?: number;
   name?: string;
   parentCategory?: ParentCategory;
+  lastModifiedDate?: string; // observed in production; not in the WSDL
 }
 
 export interface ParentCategory {
   id?: number;
   name?: string;
+  lastModifiedDate?: string; // observed in production; not in the WSDL
 }
 
 export interface CategoryAttributeList {

@@ -145,6 +145,17 @@ export interface OrderItemData {
   bundle?: boolean;
   updatedDate?: string;
   cargoCompanyWarning?: string;
+  approvedDate?: string; // observed in production; not in the WSDL
+  installmentChargeWithVAT?: number; // observed in production; not in the WSDL
+  productId?: number; // observed in production; not in the WSDL
+  sellerCouponDiscount?: number; // observed in production; not in the WSDL
+  sellerInvoiceAmount?: number; // observed in production; not in the WSDL
+  sellerStockCode?: string; // observed in production; not in the WSDL
+  shipmenCompanyCampaignNumber?: string; // observed in production; not in the WSDL
+  shippingDate?: string; // observed in production; not in the WSDL
+  sppApproved?: boolean; // observed in production; not in the WSDL
+  totalMallDiscountPrice?: number; // observed in production; not in the WSDL
+  version?: number; // observed in production; not in the WSDL
 }
 
 export interface SkuAttributeList {
@@ -231,6 +242,10 @@ export interface OrderSearchData {
   shippingDate?: string;
   customTextOptionValues?: CustomTextOptionsDataList;
   shipmenCompanyCampaignNumber?: string;
+  bundle?: boolean; // observed in production; not in the WSDL
+  sppApproved?: boolean; // observed in production; not in the WSDL
+  stockKeepingUnitId?: number; // observed in production; not in the WSDL
+  updatedDate?: string; // observed in production; not in the WSDL
 }
 
 export interface DetailedOrderDataList {
@@ -248,6 +263,10 @@ export interface DetailedOrderData {
   orderItemList?: DetailedOrderItemDataList;
   createDate?: string;
   serviceItemList?: ServiceOrderItemDataList;
+  buyer?: BuyerWithTaxFields; // observed in production; not in the WSDL
+  shippingAddress?: AddressModel; // observed in production; not in the WSDL
+  billingAddress?: AddressModel; // observed in production; not in the WSDL
+  totalDiscountAmount?: number; // observed in production; not in the WSDL
 }
 
 export interface DetailedOrderItemDataList {

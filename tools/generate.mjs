@@ -13,7 +13,7 @@
  *
  *   node tools/generate.mjs
  */
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { XMLParser } from 'fast-xml-parser';
@@ -21,6 +21,7 @@ import { XMLParser } from 'fast-xml-parser';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const WSDL_DIR = join(ROOT, 'wsdl');
 const OUT_DIR = join(ROOT, 'src', 'generated');
+const OVERLAY_DIR = join(WSDL_DIR, 'overlays');
 
 /** XSD scalar -> how the decoder should coerce it, and how TypeScript should see it. */
 const SCALARS = {
@@ -112,6 +113,72 @@ function readWsdl(xml) {
   return { complexTypes, simpleTypes, elements, operations, endpoint };
 }
 
+/**
+ * Fold `wsdl/overlays/<Service>.json` into a parsed WSDL.
+ *
+ * n11's published contracts lag its production API: `ProductSku` is declared empty yet returns
+ * eleven elements, and two operations answer with a `result` the schema never mentions. Rather
+ * than hand-edit generated files — which the next `npm run generate` would erase — the observed
+ * corrections live in a reviewed JSON document and are applied here.
+ *
+ * A field the WSDL already declares is skipped, so an overlay entry becomes a no-op the moment
+ * n11 publishes the field itself. Entries are appended: responses decode by element name, so
+ * order is irrelevant there, and appended request fields are only ever emitted when a caller
+ * sets them.
+ */
+function applyOverlay(service, wsdl) {
+  const file = join(OVERLAY_DIR, `${service}.json`);
+  if (!existsSync(file)) return { applied: 0, obsolete: [] };
+
+  const overlay = JSON.parse(readFileSync(file, 'utf8'));
+  let applied = 0;
+  const obsolete = [];
+
+  const toField = (entry) => {
+    const scalar = SCALARS[entry.type];
+    return {
+      name: entry.name,
+      type: scalar ? scalar.kind : entry.type,
+      complex: !scalar,
+      ts: scalar?.ts,
+      list: entry.list === true,
+      nillable: entry.nillable === true,
+      // Overlay fields describe what production *may* send, never what it must.
+      optional: true,
+      observed: true,
+    };
+  };
+
+  const extend = (fields, entries, where) => {
+    for (const entry of entries ?? []) {
+      if (fields.some((f) => f.name === entry.name)) {
+        obsolete.push(`${where}.${entry.name}`);
+        continue;
+      }
+      fields.push(toField(entry));
+      applied++;
+    }
+  };
+
+  for (const [name, entries] of Object.entries(overlay.types ?? {})) {
+    const fields = wsdl.complexTypes.get(name);
+    if (!fields) throw new Error(`${service} overlay targets unknown type "${name}"`);
+    extend(fields, entries, name);
+  }
+
+  for (const [operation, patch] of Object.entries(overlay.operations ?? {})) {
+    for (const suffix of ['request', 'response']) {
+      if (!patch[suffix]) continue;
+      const key = `${operation}${suffix === 'request' ? 'Request' : 'Response'}`;
+      const fields = wsdl.elements.get(key);
+      if (!fields) throw new Error(`${service} overlay targets unknown element "${key}"`);
+      extend(fields, patch[suffix], key);
+    }
+  }
+
+  return { applied, obsolete };
+}
+
 // ------------------------------------------------------------------ types ----
 
 function tsType(field, wsdl, renames = new Map()) {
@@ -136,7 +203,9 @@ function emitInterface(name, fields, wsdl, { allOptional = false, alias = false,
   const lines = [open];
   for (const field of fields) {
     const optional = allOptional || field.optional || field.nillable ? '?' : '';
-    lines.push(`  ${propKey(field.name)}${optional}: ${tsType(field, wsdl, renames)};`);
+    // Overlay fields are real but undeclared: mark them so a reader knows where they came from.
+    const note = field.observed ? ' // observed in production; not in the WSDL' : '';
+    lines.push(`  ${propKey(field.name)}${optional}: ${tsType(field, wsdl, renames)};${note}`);
   }
   lines.push(close);
   return lines.join('\n');
@@ -291,6 +360,18 @@ const parsed = manifest.services.map((entry) => ({
   entry,
   wsdl: readWsdl(readFileSync(join(WSDL_DIR, entry.file), 'utf8')),
 }));
+
+// Overlays are folded in before the sharing pass, so a type that production extends in one
+// service is correctly no longer "identical everywhere" and stays per-service.
+let overlaid = 0;
+for (const { entry, wsdl } of parsed) {
+  const { applied, obsolete } = applyOverlay(entry.service, wsdl);
+  overlaid += applied;
+  if (obsolete.length) {
+    console.log(`  ~ ${entry.service}: WSDL now declares ${obsolete.join(', ')} — drop from the overlay`);
+  }
+}
+if (overlaid) console.log(`overlays          ${overlaid} observed fields folded in (wsdl/overlays)`);
 
 const occurrences = new Map(); // type name -> Set of distinct signatures
 for (const { wsdl } of parsed) {

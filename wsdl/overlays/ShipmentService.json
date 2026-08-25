@@ -1,0 +1,13 @@
+{
+  "service": "ShipmentService",
+  "observedAt": "2026-08-25",
+  "method": "live read-only calls against api.n11.com — npm run observe",
+  "note": "ShipmentSaveAddress is shared by GetShipmentTemplateList and CreateOrUpdateShipmentTemplate, so these two fields are appended to a request sequence as well. The encoder emits a field only when the caller sets it, so existing calls are unaffected.",
+  "types": {
+    "ShipmentSaveAddress": [
+      { "name": "feeCondition", "type": "int", "evidence": "observed", "sample": "1" },
+      { "name": "feeConditionPrice", "type": "decimal", "evidence": "observed", "sample": "0" }
+    ]
+  },
+  "operations": {}
+}

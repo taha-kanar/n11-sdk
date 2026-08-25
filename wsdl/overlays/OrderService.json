@@ -1,0 +1,34 @@
+{
+  "service": "OrderService",
+  "observedAt": "2026-08-25",
+  "method": "live read-only calls against api.n11.com — npm run observe",
+  "note": "DetailedOrderList exists to save a round trip, yet its DetailedOrderData omits the buyer and both addresses — the very fields that make it worth calling. All three are declared on OrderDetailData in the same WSDL, so the overlay reuses n11's own types instead of inventing them. Note AddressModel types postalCode and tcId as string: Turkish postal codes start at 01000, and inferring `number` from a sample would corrupt them.",
+  "types": {
+    "DetailedOrderData": [
+      { "name": "buyer", "type": "BuyerWithTaxFields", "evidence": "OrderDetailData.buyer", "sample": "id, fullName, taxId, taxOffice, email, tcId — an exact field-for-field match" },
+      { "name": "shippingAddress", "type": "AddressModel", "evidence": "OrderDetailData.shippingAddress", "sample": "address, fullName, city, district, neighborhood, postalCode, gsm, tcId, taxId, taxHouse — an exact match" },
+      { "name": "billingAddress", "type": "AddressModel", "evidence": "OrderDetailData.billingAddress", "sample": "same ten elements" },
+      { "name": "totalDiscountAmount", "type": "decimal", "evidence": "OrderData.totalDiscountAmount", "sample": "150" }
+    ],
+    "OrderItemData": [
+      { "name": "approvedDate", "type": "string", "evidence": "OrderSearchData.approvedDate", "sample": "22/04/2026" },
+      { "name": "installmentChargeWithVAT", "type": "decimal", "evidence": "OrderSearchData.installmentChargeWithVAT", "sample": "0" },
+      { "name": "productId", "type": "long", "evidence": "OrderSearchData.productId", "sample": "741819023" },
+      { "name": "sellerCouponDiscount", "type": "decimal", "evidence": "OrderSearchData.sellerCouponDiscount", "sample": "0" },
+      { "name": "sellerInvoiceAmount", "type": "decimal", "evidence": "OrderSearchData.sellerInvoiceAmount", "sample": "439.53" },
+      { "name": "sellerStockCode", "type": "string", "evidence": "OrderSearchData.sellerStockCode", "sample": "TXDD45F26D4B" },
+      { "name": "shipmenCompanyCampaignNumber", "type": "string", "evidence": "OrderSearchData.shipmenCompanyCampaignNumber", "sample": "a 15-digit carrier tracking number, kept out of this file — n11 types it as a string, and it stays one" },
+      { "name": "shippingDate", "type": "string", "evidence": "OrderSearchData.shippingDate", "sample": "22/04/2026" },
+      { "name": "sppApproved", "type": "boolean", "evidence": "observed", "sample": "true" },
+      { "name": "totalMallDiscountPrice", "type": "decimal", "evidence": "OrderSearchData.totalMallDiscountPrice", "sample": "150" },
+      { "name": "version", "type": "int", "evidence": "OrderSearchData.version", "sample": "3" }
+    ],
+    "OrderSearchData": [
+      { "name": "bundle", "type": "boolean", "evidence": "ProductSkuRequest.bundle (ProductService)", "sample": "false" },
+      { "name": "sppApproved", "type": "boolean", "evidence": "observed", "sample": "true" },
+      { "name": "stockKeepingUnitId", "type": "long", "evidence": "OrderItemData.stockKeepingUnitId", "sample": "127370128290" },
+      { "name": "updatedDate", "type": "string", "evidence": "observed", "sample": "23/04/2026 14:01" }
+    ]
+  },
+  "operations": {}
+}

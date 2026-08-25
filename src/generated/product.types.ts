@@ -45,6 +45,7 @@ export interface Product {
   maxPurchaseQuantity?: number;
   productStatusDetail?: string;
   sellerNote?: string;
+  domestic?: boolean; // observed in production; not in the WSDL
 }
 
 export interface SpecialProductInfoList {
@@ -96,6 +97,8 @@ export interface ProductBasic {
   currencyAmount?: number;
   currencyType?: number;
   productStatusDetail?: string;
+  n11CatalogGroupId?: number; // observed in production; not in the WSDL
+  unitInfo?: ProductUnitInfoModel; // observed in production; not in the WSDL
 }
 
 export interface ProductData {
@@ -168,7 +171,19 @@ export interface ProductImageList {
   image?: ProductImage[];
 }
 
-export interface ProductSku {}
+export interface ProductSku {
+  bundle?: boolean; // observed in production; not in the WSDL
+  currencyAmount?: number; // observed in production; not in the WSDL
+  displayPrice?: number; // observed in production; not in the WSDL
+  optionPrice?: number; // observed in production; not in the WSDL
+  n11CatalogId?: number; // observed in production; not in the WSDL
+  sellerStockCode?: string; // observed in production; not in the WSDL
+  attributes?: ProductAttributeList; // observed in production; not in the WSDL
+  id?: number; // observed in production; not in the WSDL
+  images?: ProductImageList; // observed in production; not in the WSDL
+  quantity?: number; // observed in production; not in the WSDL
+  version?: number; // observed in production; not in the WSDL
+}
 
 export interface ProductSkuBasic {}
 
@@ -417,6 +432,7 @@ export interface ProductApprovalStatusApi {
   waitingCount?: number;
   rejectedCount?: number;
   totalCount?: number;
+  status?: string; // observed in production; not in the WSDL
 }
 
 export interface ProductIdList {
@@ -498,6 +514,7 @@ export type GetProductQuestionListRequest = {
 export interface GetProductQuestionListResponse {
   productQuestions?: ProductQuestionList;
   pagingData?: PagingData;
+  result?: ResultInfo; // observed in production; not in the WSDL
 }
 
 /** `UpdateProductBasic` request body. */
@@ -524,6 +541,7 @@ export type GetProductQuestionDetailRequest = {
 /** `GetProductQuestionDetail` response body. */
 export interface GetProductQuestionDetailResponse {
   productQuestion?: ProductQuestionDetail;
+  result?: ResultInfo; // observed in production; not in the WSDL
 }
 
 /** `SaveProductAnswer` request body. */

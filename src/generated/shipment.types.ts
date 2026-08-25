@@ -49,6 +49,8 @@ export interface ShipmentSaveAddress {
   district?: DistrictApiModel;
   city?: CityApiModel;
   postalCode?: string;
+  feeCondition?: number; // observed in production; not in the WSDL
+  feeConditionPrice?: number; // observed in production; not in the WSDL
 }
 
 export interface DistrictApiModel {

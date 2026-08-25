@@ -20,21 +20,36 @@ export interface N11ResponseBody {
  * The check is deliberately "not success" rather than "equals failure": n11 has been seen to
  * answer `failure`, `error` and, on some services, nothing at all. Anything that is not an
  * explicit success, with an error code attached, is treated as a failure.
+ *
+ * It runs on every response, including those whose `result` the WSDL never declared and which
+ * therefore arrive as untyped passthrough — hence the string coercion rather than a cast.
+ * Operations whose `result` carries data instead of a status (`ProductApprovalStatus` returns
+ * counts) fall through untouched: no status, no error code, no exception.
  */
 export function assertSuccess(body: N11ResponseBody | undefined, context: N11ErrorContext): void {
   const result = body?.result;
-  if (!result) return;
+  if (!result || typeof result !== 'object') return;
 
-  const status = result.status?.toLowerCase();
-  const hasError = Boolean(result.errorCode || result.errorMessage);
+  const status = text(result.status)?.toLowerCase();
+  const errorCode = text(result.errorCode);
+  const errorMessage = text(result.errorMessage);
+  const hasError = Boolean(errorCode || errorMessage);
   if (status === 'success' || (!hasError && status !== 'failure' && status !== 'error')) return;
 
-  const detail = result.errorMessage || result.errorCode || status || 'unknown error';
+  const detail = errorMessage || errorCode || status || 'unknown error';
   throw new N11ApiError(
     `${context.operation} failed: ${detail}`,
     context,
-    result.errorCode ?? undefined,
-    result.errorMessage ?? undefined,
-    result.errorCategory ?? undefined
+    errorCode,
+    errorMessage,
+    text(result.errorCategory)
   );
+}
+
+/** Undeclared elements reach us as whatever the XML parser made of them, not always a string. */
+function text(value: unknown): string | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === 'object') return text((value as Record<string, unknown>)['#text']);
+  const string = String(value);
+  return string === '' ? undefined : string;
 }

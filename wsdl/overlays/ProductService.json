@@ -1,0 +1,44 @@
+{
+  "service": "ProductService",
+  "observedAt": "2026-08-25",
+  "method": "live read-only calls against api.n11.com — npm run observe",
+  "note": "ProductSku is declared as an EMPTY complexType in the WSDL, yet every product listing returns eleven elements inside <stockItem> — including the id and quantity you need to manage stock. Ten of the eleven are declared by its write-side twin ProductSkuRequest, so their types are n11's own.",
+  "types": {
+    "ProductSku": [
+      { "name": "bundle", "type": "boolean", "evidence": "ProductSkuRequest.bundle", "sample": "false" },
+      { "name": "currencyAmount", "type": "decimal", "evidence": "ProductBasic.currencyAmount", "sample": "791.44" },
+      { "name": "displayPrice", "type": "decimal", "evidence": "ProductBasic.displayPrice", "sample": "791.44" },
+      { "name": "optionPrice", "type": "decimal", "evidence": "ProductSkuRequest.optionPrice", "sample": "791.44" },
+      { "name": "n11CatalogId", "type": "long", "evidence": "ProductSkuRequest.n11CatalogId", "sample": "281771404" },
+      { "name": "sellerStockCode", "type": "string", "evidence": "ProductSkuRequest.sellerStockCode", "sample": "EDT-K71-1000" },
+      { "name": "attributes", "type": "ProductAttributeList", "evidence": "observed", "sample": "<attribute><id>354080385</id><name>Marka</name><value>Kimyasitesi</value></attribute> — exactly ProductAttribute" },
+      { "name": "id", "type": "long", "evidence": "ProductSkuList.id", "sample": "127371500417" },
+      { "name": "images", "type": "ProductImageList", "evidence": "observed", "sample": "<image><order>1</order><url>https://…jpg</url></image> — exactly ProductImage" },
+      { "name": "quantity", "type": "int", "evidence": "ProductSkuRequest.quantity", "sample": "10" },
+      { "name": "version", "type": "int", "evidence": "observed", "sample": "6" }
+    ],
+    "ProductBasic": [
+      { "name": "n11CatalogGroupId", "type": "long", "evidence": "observed", "sample": "124696719" },
+      { "name": "unitInfo", "type": "ProductUnitInfoModel", "evidence": "Product.unitInfo", "sample": "<unitInfo/> — always empty on this account" }
+    ],
+    "Product": [
+      { "name": "domestic", "type": "boolean", "evidence": "ProductRequest.domestic", "sample": "true" }
+    ],
+    "ProductApprovalStatusApi": [
+      { "name": "status", "type": "string", "evidence": "ResultInfo.status", "sample": "success" }
+    ]
+  },
+  "operations": {
+    "GetProductQuestionList": {
+      "note": "The WSDL gives this operation no `result` at all, so a failure used to decode as a successful empty page. Production returns the standard ResultInfo — a rate-limit refusal surfaced it: SELLER_API.getProductQuestionListRequest.accessLimit.reached.",
+      "response": [
+        { "name": "result", "type": "ResultInfo", "evidence": "observed", "sample": "<result><status>failure</status><errorCode>SELLER_API…accessLimit.reached</errorCode></result>" }
+      ]
+    },
+    "GetProductQuestionDetail": {
+      "response": [
+        { "name": "result", "type": "ResultInfo", "evidence": "observed", "sample": "<result><status>success</status></result>" }
+      ]
+    }
+  }
+}

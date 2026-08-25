@@ -55,7 +55,10 @@ seller with one category. Here the schema says `maxOccurs="unbounded"`, so it is
 one parses every value as text and converts only what the XSD types as numeric.
 
 **Errors inside a 200.** n11 answers `HTTP 200` with `result.status = "failure"` in the body. That
-becomes an `N11ApiError`, carrying n11's own `errorCode`, `errorMessage` and `errorCategory`.
+becomes an `N11ApiError`, carrying n11's own `errorCode`, `errorMessage` and `errorCategory`. The
+check runs on every decoded response, not only on the operations whose WSDL declares a `result` —
+[see below](#what-production-returns-that-the-wsdl-does-not) for why that distinction cost a
+silently-swallowed failure.
 
 ```ts
 import { N11ApiError, N11SoapFaultError, N11Error } from 'n11-sdk';
@@ -142,17 +145,99 @@ const result = await n11.call('https://api.n11.com/ws/productStockService/', 'Up
 type for a contract we cannot read. If n11 publishes those WSDLs again, drop them into `wsdl/`, add
 them to `wsdl/manifest.json`, and `npm run generate` types them like the rest.
 
+## What production returns that the WSDL does not
+
+n11's published WSDLs lag its production API. Running the read-only operations against a live
+seller account on **2026-08-25** and comparing every element on the wire against its declared type
+turned up **42 elements the schema does not mention** across 22 operations, and one bug in this
+SDK:
+
+| What the WSDL says | What production does |
+| --- | --- |
+| `ProductSku` is an **empty** complexType | every `<stockItem>` carries eleven elements — including the `id` and `quantity` you need to manage stock |
+| `DetailedOrderData` has no buyer or address | `DetailedOrderList` returns `buyer`, `shippingAddress` and `billingAddress` — the fields that make the call worth its name |
+| `OrderItemData` has 11 fewer fields than `OrderSearchData` | the same eleven come back, `sellerInvoiceAmount` and `shippingDate` among them |
+| `lastModifiedDate` exists on `SubCategory` only | every category type carries it — which is what makes an incremental category sync possible |
+| `GetProductQuestionList` has **no `result`** | it returns the standard one, failures included |
+
+That last row was the bug. The failure check used to ask the schema whether a response carried a
+`result`, which is exactly the question a stale schema answers wrongly: a rate-limited call came
+back `HTTP 200`, `status=failure`, `SELLER_API.…accessLimit.reached` — and this SDK reported an
+empty page of questions. It now checks the decoded body instead, so an operation the schema has not
+caught up with still raises, and so does one reached through the untyped `call()` escape hatch.
+
+The corrections live in `wsdl/overlays/*.json` and are folded in by `npm run generate`. Every entry
+records **evidence**, never a guess — nearly all of them reuse a type n11 itself declares for the
+same field name elsewhere in the same service:
+
+```json
+{ "name": "sellerStockCode", "type": "string",
+  "evidence": "ProductSkuRequest.sellerStockCode", "sample": "EDT-K71-1000" }
+```
+
+That rule is not pedantry. Inferring types from samples is how a seller code loses its leading zero
+and a postal code becomes a number — Adana's is `01000`. n11's own schema already types
+`AddressModel.postalCode` and `tcId` as strings, and the overlay takes its word for it. Fields the
+schema declares are skipped, so an overlay entry becomes a no-op the day n11 publishes the field
+itself, and `npm run generate` says which entries have gone obsolete.
+
+Overlay fields are marked in the generated types, so nothing is silently invented:
+
+```ts
+export interface ProductSku {
+  id?: number;       // observed in production; not in the WSDL
+  quantity?: number; // observed in production; not in the WSDL
+}
+```
+
 ## Keeping up with the API
 
 ```bash
 npm run fetch-wsdl     # refresh wsdl/*.wsdl from api.n11.com
-npm run generate       # wsdl/*.wsdl -> src/generated/*
+npm run generate       # wsdl/*.wsdl -> src/generated/* , applying wsdl/overlays/*
 npm test               # fails if an operation was added, removed, renamed or re-routed
+npm run observe        # call the read-only operations for real, and diff the wire against the schema
 ```
 
 `tests/wsdl-coverage.test.ts` compares every operation in the WSDLs against what the service
 classes actually call, and checks each service still points at its own endpoint. An n11 change that
 would otherwise surface as a production SOAP fault becomes a failing test instead.
+`tests/drift.test.ts` does the same for the overlays: delete one and the build goes red.
+
+Those two catch a contract that *changes*. `npm run observe` catches a contract that was never
+described accurately in the first place:
+
+```bash
+N11_APP_KEY=… N11_APP_SECRET=… npm run observe
+```
+
+It walks the read-only operations, chaining real ids as it goes, and reports every element that
+disagrees with its declared shape — undeclared fields, single elements that turned out to repeat,
+`xsi:nil` on something not nillable, a number that is not one. It ends with a review list of
+overlay candidates. Two rules make it safe against a live seller account:
+
+- **It cannot write.** Only operations on an explicit read-only allowlist are callable; anything
+  else throws before a request is built.
+- **It cannot leak a customer.** Order payloads carry names, e-mail addresses, phone numbers and
+  national id numbers. Values of those fields are redacted before anything is printed, and
+  `--write` records field *names* and counts to `wsdl/observation.json` — never payload values. A
+  test asserts the repository contains no e-mail address, TC number or GSM number.
+
+With the overlays in place the run is clean, and it caught the rate limit on the way past:
+
+```
+  fail  products.questions — N11ApiError: Ürün soruları 1 dakikada bir kez listelenebilmektedir.
+
+25/25 probed operations matched the WSDL exactly.
+```
+
+That `fail` line is the fix working: before it, the same refusal decoded as a successful empty
+page. `wsdl/observation.json` records the run.
+
+It reaches **22 of the 43 operations**. The other 21 are writes — everything that creates, ships or
+deletes — plus `GetProductQuestionDetail`, whose list call is rate-limited to one request a minute.
+Those are described by the schema alone, so treat their types as the WSDL's claim rather than an
+observed fact, and re-run `npm run observe` after any n11 release.
 
 ## Architecture
 

@@ -131,11 +131,17 @@ export class SoapTransport {
     }
 
     // n11 reports business failures inside a 200 — this is where that becomes an exception.
-    // Whether `result` carries a status is a schema question, not a guess: `ProductApprovalStatus`
-    // also has a `result` element, but it holds counts, and must not be read as a failure.
-    const shape = shapes.operations[operation];
-    const carriesStatus = shape?.response.some((field) => field.n === 'result' && field.t === 'ResultInfo');
-    if (carriesStatus) assertSuccess(parsed.body as N11ResponseBody | undefined, context);
+    //
+    // The check runs on the decoded body rather than on what the schema promised. Gating it on
+    // `result` being declared as `ResultInfo` looked tidier, but production disproved it: the
+    // WSDL gives `GetProductQuestionList` no `result` at all, so a rate-limit refusal
+    // (`SELLER_API.…accessLimit.reached`) decoded as a perfectly successful empty page. Anything
+    // the schema has not caught up with — including the services reached through
+    // `N11Client.call`, which have no schema — is checked all the same.
+    //
+    // `assertSuccess` only raises on an explicit failure or an attached error code, so
+    // `ProductApprovalStatus`, whose `result` holds counts rather than a status, still passes.
+    assertSuccess(parsed.body as N11ResponseBody | undefined, context);
 
     return (parsed.body ?? {}) as TResponse;
   }

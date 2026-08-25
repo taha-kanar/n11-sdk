@@ -1,0 +1,286 @@
+{
+  "observedAt": "2026-08-25",
+  "endpoint": "https://api.n11.com/ws",
+  "note": "Written by tools/observe.mjs. Records which operations were exercised and which elements disagreed with the WSDL. No payload values are stored.",
+  "outcomes": [
+    {
+      "label": "categories.topLevel",
+      "ok": true
+    },
+    {
+      "label": "categories.subCategories(1002841)",
+      "ok": true
+    },
+    {
+      "label": "categories.subCategories(1002958)",
+      "ok": true
+    },
+    {
+      "label": "categories.subCategories(1002960)",
+      "ok": true
+    },
+    {
+      "label": "categories.subCategories(1002964)",
+      "ok": true
+    },
+    {
+      "label": "categories.parent",
+      "ok": true
+    },
+    {
+      "label": "categories.attributes",
+      "ok": true
+    },
+    {
+      "label": "categories.attributeIds",
+      "ok": true
+    },
+    {
+      "label": "categories.attributeValues",
+      "ok": true
+    },
+    {
+      "label": "cities.list",
+      "ok": true
+    },
+    {
+      "label": "cities.get(34)",
+      "ok": true
+    },
+    {
+      "label": "cities.districts(34)",
+      "ok": true
+    },
+    {
+      "label": "cities.neighborhoods",
+      "ok": true
+    },
+    {
+      "label": "shipmentCompanies.list",
+      "ok": true
+    },
+    {
+      "label": "shipments.listTemplates",
+      "ok": true
+    },
+    {
+      "label": "shipments.getTemplate",
+      "ok": true
+    },
+    {
+      "label": "products.list",
+      "ok": true
+    },
+    {
+      "label": "products.getById",
+      "ok": true
+    },
+    {
+      "label": "products.getBySellerCode",
+      "ok": true
+    },
+    {
+      "label": "products.search",
+      "ok": true
+    },
+    {
+      "label": "products.approvalStatus",
+      "ok": true
+    },
+    {
+      "label": "products.questions",
+      "ok": false,
+      "error": "N11ApiError",
+      "code": "SELLER_API.getProductQuestionListRequest.accessLimit.reached"
+    },
+    {
+      "label": "orders.list",
+      "ok": true
+    },
+    {
+      "label": "orders.detail",
+      "ok": true
+    },
+    {
+      "label": "orders.listDetailed",
+      "ok": true
+    }
+  ],
+  "operations": [
+    {
+      "service": "CategoryService",
+      "operation": "GetTopLevelCategories",
+      "status": 200,
+      "bytes": 9985,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetSubCategories",
+      "status": 200,
+      "bytes": 2212,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetSubCategories",
+      "status": 200,
+      "bytes": 1646,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetSubCategories",
+      "status": 200,
+      "bytes": 820,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetSubCategories",
+      "status": 200,
+      "bytes": 402,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetParentCategory",
+      "status": 200,
+      "bytes": 545,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetCategoryAttributes",
+      "status": 200,
+      "bytes": 22279,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetCategoryAttributesId",
+      "status": 200,
+      "bytes": 806,
+      "findings": []
+    },
+    {
+      "service": "CategoryService",
+      "operation": "GetCategoryAttributeValue",
+      "status": 200,
+      "bytes": 14815,
+      "findings": []
+    },
+    {
+      "service": "CityService",
+      "operation": "GetCities",
+      "status": 200,
+      "bytes": 7139,
+      "findings": []
+    },
+    {
+      "service": "CityService",
+      "operation": "GetCity",
+      "status": 200,
+      "bytes": 359,
+      "findings": []
+    },
+    {
+      "service": "CityService",
+      "operation": "GetDistrict",
+      "status": 200,
+      "bytes": 2496,
+      "findings": []
+    },
+    {
+      "service": "CityService",
+      "operation": "GetNeighborhoods",
+      "status": 200,
+      "bytes": 1513,
+      "findings": []
+    },
+    {
+      "service": "ShipmentCompanyService",
+      "operation": "GetShipmentCompanies",
+      "status": 200,
+      "bytes": 6991,
+      "findings": []
+    },
+    {
+      "service": "ShipmentService",
+      "operation": "GetShipmentTemplateList",
+      "status": 200,
+      "bytes": 5529,
+      "findings": []
+    },
+    {
+      "service": "ShipmentService",
+      "operation": "GetShipmentTemplate",
+      "status": 200,
+      "bytes": 5482,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "GetProductList",
+      "status": 200,
+      "bytes": 4303,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "GetProductByProductId",
+      "status": 200,
+      "bytes": 8549,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "GetProductBySellerCode",
+      "status": 200,
+      "bytes": 8551,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "SearchProducts",
+      "status": 200,
+      "bytes": 4303,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "ProductApprovalStatus",
+      "status": 200,
+      "bytes": 301,
+      "findings": []
+    },
+    {
+      "service": "ProductService",
+      "operation": "GetProductQuestionList",
+      "status": 200,
+      "bytes": 529,
+      "findings": []
+    },
+    {
+      "service": "OrderService",
+      "operation": "OrderList",
+      "status": 200,
+      "bytes": 1432,
+      "findings": []
+    },
+    {
+      "service": "OrderService",
+      "operation": "OrderDetail",
+      "status": 200,
+      "bytes": 3511,
+      "findings": []
+    },
+    {
+      "service": "OrderService",
+      "operation": "DetailedOrderList",
+      "status": 200,
+      "bytes": 17441,
+      "findings": []
+    }
+  ]
+}
